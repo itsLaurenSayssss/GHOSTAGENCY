@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE GHOST AGENCY</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Config for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ghost: '#00FF41',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #00FF41; border-radius: 4px; }
+        /* Hide scrollbar for clean look but allow functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        /* GHOST AGENCY - STANDALONE HTML PROTOCOL */
+
+        const App = () => {
+            const [scrolled, setScrolled] = useState(false);
+            const [activeAgent, setActiveAgent] = useState(0);
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [theme, setTheme] = useState('dark');
+
+            const isDark = theme === 'dark';
+
+            // Toggle Theme Function
+            const toggleTheme = () => {
+                setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+            };
+
+            // Handle scroll effects for navbar
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            // Agent Data
+            const agents = [
+                {
+                    id: 1,
+                    name: "THE ARCHITECT",
+                    role: "STRATEGY & FRAMEWORKS",
+                    iconClass: "fa-solid fa-microchip", // FontAwesome
+                    desc: "Turns chaos into order. Builds the North Star, product roadmaps, and go-to-market pillars.",
+                    quote: "Do not write content. Design frameworks."
+                },
+                {
+                    id: 2,
+                    name: "THE ORACLE",
+                    role: "VOICE & PSYCHOLOGY",
+                    iconClass: "fa-solid fa-eye",
+                    desc: "The voice. Shifts tone from dark/minimal to optimistic/tech. Writes belief systems, not just copy.",
+                    quote: "Psychology over syntax. Verbs are weapons."
+                },
+                {
+                    id: 3,
+                    name: "THE CONSTRUCT",
+                    role: "VISUALS & CODE",
+                    iconClass: "fa-solid fa-layer-group",
+                    desc: "The hands. Translates strategy into visual reality. Web design, image prompts, and code integrity.",
+                    quote: "Swiss Style. Brutalist. Production-ready."
+                },
+                {
+                    id: 4,
+                    name: "THE OPERATOR",
+                    role: "OPS & LOGISTICS",
+                    iconClass: "fa-solid fa-shield-halved",
+                    desc: "The tank. Protects the downside. Handles margins, legal exposure, and process optimization.",
+                    quote: "The math must math. Clarity is king."
+                }
+            ];
+
+            // Dynamic Styles
+            const styles = {
+                bg: isDark ? 'bg-black' : 'bg-[#F5F5F7]',
+                text: isDark ? 'text-white' : 'text-[#1D1D1F]',
+                textMuted: isDark ? 'text-gray-400' : 'text-[#86868b]',
+                border: isDark ? 'border-white/10' : 'border-black/5',
+                navBg: isDark ? 'bg-black/80 border-white/10' : 'bg-white/80 border-black/5',
+                buttonPrimary: 'bg-[#00FF41] text-black',
+                buttonSecondary: isDark ? 'bg-transparent border-white/20 text-white hover:bg-white/5' : 'bg-white border-black/10 text-[#1D1D1F] hover:bg-black/5 shadow-sm',
+                glitchColor: isDark ? 'bg-[#00FF41]' : 'bg-[#00CC33]',
+            };
+
+            return (
+                <div className={`min-h-screen font-sans selection:bg-[#00FF41] selection:text-black overflow-x-hidden transition-colors duration-500 ${styles.bg} ${styles.text}`}>
+                
+                    {/* --- NAVIGATION --- */}
+                    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b backdrop-blur-md px-6 py-4 ${scrolled ? styles.navBg : 'bg-transparent border-transparent'}`}>
+                        <div className="max-w-7xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-2 group cursor-pointer">
+                                <div className={`w-8 h-8 rounded-sm flex items-center justify-center font-bold text-lg group-hover:animate-pulse shadow-[0_0_10px_rgba(0,255,65,0.3)] ${isDark ? 'bg-[#00FF41] text-black' : 'bg-black text-[#00FF41]'}`}>
+                                    G
+                                </div>
+                                <span className="font-bold tracking-widest text-sm md:text-base hidden sm:block">GHOST AGENCY</span>
+                            </div>
+                            
+                            <div className={`hidden md:flex gap-8 text-sm font-medium ${styles.textMuted}`}>
+                                <a href="#protocol" className="hover:text-[#00FF41] transition-colors">PROTOCOL</a>
+                                <a href="#agents" className="hover:text-[#00FF41] transition-colors">AGENTS</a>
+                                <a href="#comparison" className="hover:text-[#00FF41] transition-colors">DATA</a>
+                                <a href="#pricing" className="hover:text-[#00FF41] transition-colors">DEPLOY</a>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* THEME TOGGLE */}
+                                <button 
+                                    onClick={toggleTheme}
+                                    className={`p-2 rounded-full transition-colors ${isDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-black/5 hover:bg-black/10 text-black'}`}
+                                    title="Toggle Theme"
+                                >
+                                    {isDark ? <i className="fa-solid fa-sun"></i> : <i className="fa-solid fa-moon"></i>}
+                                </button>
+
+                                <button 
+                                    className={`md:hidden ${isDark ? 'text-white' : 'text-black'}`}
+                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                >
+                                    <i className="fa-solid fa-bars text-xl"></i>
+                                </button>
+                                
+                                <button className={`hidden md:flex items-center gap-2 border px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all hover:scale-105 active:scale-95 ${isDark ? 'bg-white/5 border-white/10' : 'bg-white border-black/10 shadow-sm'}`}>
+                                    <i className="fa-solid fa-lock text-[#00FF41]"></i>
+                                    MEMBER LOGIN
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Mobile Menu */}
+                    {isMenuOpen && (
+                        <div className={`fixed inset-0 z-40 pt-24 px-6 md:hidden ${styles.bg}`}>
+                            <div className={`flex flex-col gap-8 text-xl font-bold tracking-widest ${styles.textMuted}`}>
+                                <a href="#protocol" onClick={() => setIsMenuOpen(false)} className="hover:text-[#00FF41]">PROTOCOL</a>
+                                <a href="#agents" onClick={() => setIsMenuOpen(false)} className="hover:text-[#00FF41]">AGENTS</a>
+                                <a href="#comparison" onClick={() => setIsMenuOpen(false)} className="hover:text-[#00FF41]">DATA</a>
+                                <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="hover:text-[#00FF41]">DEPLOY</a>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* --- HERO SECTION --- */}
+                    <header className="relative pt-32 pb-20 px-6 md:pt-48 md:pb-32 flex flex-col items-center text-center overflow-hidden">
+                        {/* Background Grid Effect */}
+                        <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" 
+                             style={{ 
+                               backgroundImage: isDark 
+                                ? 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)'
+                                : 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)', 
+                               backgroundSize: '40px 40px' 
+                             }}>
+                        </div>
+                        
+                        {/* Glitch Decorative Element */}
+                        <div className={`absolute top-1/4 left-10 md:left-1/4 w-32 h-32 blur-[100px] opacity-20 rounded-full animate-pulse ${styles.glitchColor}`}></div>
+
+                        <div className="z-10 max-w-4xl mx-auto space-y-6">
+                            <div className={`inline-flex items-center gap-2 px-3 py-1 border rounded-full text-[#00FF41] text-xs font-mono font-bold tracking-wider mb-4 animate-fade-in-up ${isDark ? 'bg-[#00FF41]/10 border-[#00FF41]/20' : 'bg-[#00FF41]/5 border-[#00FF41]/30'}`}>
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF41] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00FF41]"></span>
+                                </span>
+                                SYSTEM STATUS: ONLINE
+                            </div>
+
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9]">
+                                THE AGENCY <br />
+                                <span className={`bg-clip-text text-transparent ${isDark ? 'bg-gradient-to-r from-gray-400 to-white' : 'bg-gradient-to-r from-gray-600 to-black'}`}>IS DEAD.</span>
+                            </h1>
+
+                            <p className={`max-w-xl mx-auto text-lg md:text-xl leading-relaxed font-light ${styles.textMuted}`}>
+                                You don't need more staff. You need a better protocol. 
+                                Replace the $10k/month retainer with 4 lines of code.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                                <a href="#pricing" className={`group relative px-8 py-4 font-bold tracking-wider rounded transition-all duration-300 flex items-center justify-center gap-2 ${styles.buttonPrimary} hover:opacity-90 shadow-[0_0_15px_rgba(0,255,65,0.4)]`}>
+                                    INITIALIZE SYSTEM
+                                    <i className="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                <button className={`px-8 py-4 font-medium tracking-wider rounded transition-all flex items-center justify-center gap-2 group ${styles.buttonSecondary}`}>
+                                    <i className={`fa-solid fa-terminal transition-colors ${isDark ? 'text-gray-500 group-hover:text-[#00FF41]' : 'text-gray-400 group-hover:text-black'}`}></i>
+                                    VIEW DEMO
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Scroll Indicator */}
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+                            <div className={`w-[1px] h-12 bg-gradient-to-b from-transparent to-transparent ${isDark ? 'via-gray-500' : 'via-gray-400'}`}></div>
+                        </div>
+                    </header>
+
+                    {/* --- PROBLEM/SOLUTION (The Protocol) --- */}
+                    <section id="protocol" className={`py-24 px-6 border-t relative ${styles.border} ${isDark ? 'bg-black' : 'bg-[#F5F5F7]'}`}>
+                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                            <div className="space-y-8">
+                                <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+                                    BLANK PAGE <br />
+                                    <span className="text-[#00FF41]">SYNDROME.</span>
+                                </h2>
+                                <div className={`space-y-6 text-lg font-light ${styles.textMuted}`}>
+                                    <p>
+                                        Founders are overwhelmed. Agencies are too expensive. 
+                                        You are stuck in the middle, staring at a cursor that won't move.
+                                    </p>
+                                    <p>
+                                        The old way requires meetings, mood boards, and month-long delays.
+                                        The Ghost Protocol requires input and execution.
+                                    </p>
+                                    <div className={`p-4 border rounded font-mono text-sm ${isDark ? 'bg-white/5 border-white/10 text-[#00FF41]' : 'bg-white border-black/10 text-[#00AA2C] shadow-sm'}`}>
+                                        {'>'} UNIDENTIFIED ERROR: HUMAN_FATIGUE DETECTED <br/>
+                                        {'>'} SOLUTION: AUTOMATE CREATIVE STACK <br/>
+                                        {'>'} EXECUTING...
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="relative">
+                                {/* Abstract visual representation of the 'Old Way' crumbling */}
+                                <div className="grid grid-cols-2 gap-4 opacity-80">
+                                    <div className={`p-6 rounded-lg border h-48 flex flex-col justify-between transition-all duration-300 ${isDark ? 'bg-[#111] border-white/5 hover:border-[#00FF41]/50' : 'bg-white border-black/5 shadow-sm hover:shadow-md hover:border-[#00FF41]/30'}`}>
+                                        <i className="fa-solid fa-xmark text-3xl text-red-500"></i>
+                                        <span className={`text-sm font-mono ${styles.textMuted}`}>RETAINER_FEES</span>
+                                    </div>
+                                    <div className={`p-6 rounded-lg border h-48 flex flex-col justify-between mt-8 transition-all duration-300 ${isDark ? 'bg-[#111] border-white/5 hover:border-[#00FF41]/50' : 'bg-white border-black/5 shadow-sm hover:shadow-md hover:border-[#00FF41]/30'}`}>
+                                        <i className="fa-solid fa-xmark text-3xl text-red-500"></i>
+                                        <span className={`text-sm font-mono ${styles.textMuted}`}>STAFF_MEETINGS</span>
+                                    </div>
+                                    <div className={`p-6 rounded-lg border h-48 flex flex-col justify-between -mt-8 transition-all duration-300 ${isDark ? 'bg-[#111] border-white/5 hover:border-[#00FF41]/50' : 'bg-white border-black/5 shadow-sm hover:shadow-md hover:border-[#00FF41]/30'}`}>
+                                        <i className="fa-solid fa-xmark text-3xl text-red-500"></i>
+                                        <span className={`text-sm font-mono ${styles.textMuted}`}>BURNOUT</span>
+                                    </div>
+                                    <div className={`p-6 rounded-lg border h-48 flex flex-col justify-between transition-all duration-300 ${isDark ? 'bg-[#111] border-white/5 hover:border-[#00FF41]/50' : 'bg-white border-black/5 shadow-sm hover:shadow-md hover:border-[#00FF41]/30'}`}>
+                                        <i className="fa-solid fa-xmark text-3xl text-red-500"></i>
+                                        <span className={`text-sm font-mono ${styles.textMuted}`}>DELAYED_LAUNCH</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- THE AGENTS (Bento Grid) --- */}
+                    <section id="agents" className={`py-24 px-6 ${isDark ? 'bg-[#050505]' : 'bg-white'}`}>
+                        <div className="max-w-7xl mx-auto space-y-16">
+                            <div className="text-center space-y-4">
+                                <span className="text-[#00FF41] font-mono text-sm tracking-widest">THE STAFFLESS PROTOCOL</span>
+                                <h2 className="text-4xl md:text-5xl font-bold tracking-tight">MEET THE SQUAD</h2>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {agents.map((agent, index) => (
+                                    <div 
+                                        key={agent.id}
+                                        onMouseEnter={() => setActiveAgent(index)}
+                                        className={`p-6 rounded-xl border transition-all duration-300 cursor-default flex flex-col h-full ${
+                                            activeAgent === index 
+                                            ? `${isDark ? 'bg-white/10 border-[#00FF41] shadow-[0_0_30px_rgba(0,255,65,0.1)]' : 'bg-[#F5F5F7] border-[#00FF41] shadow-lg scale-[1.02]'}`
+                                            : `${isDark ? 'bg-black border-white/10 hover:border-white/30' : 'bg-white border-black/5 hover:border-black/20 hover:shadow-md'}`
+                                        }`}
+                                    >
+                                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-6 transition-colors ${
+                                            activeAgent === index 
+                                            ? 'bg-[#00FF41] text-black' 
+                                            : `${isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-500'}`
+                                        }`}>
+                                            <i className={`${agent.iconClass} text-xl`}></i>
+                                        </div>
+                                        
+                                        <h3 className="text-xl font-bold mb-1 tracking-wide">{agent.name}</h3>
+                                        <p className="text-xs font-mono text-[#00FF41] mb-4">{agent.role}</p>
+                                        
+                                        <p className={`text-sm leading-relaxed mb-8 flex-grow ${styles.textMuted}`}>
+                                            {agent.desc}
+                                        </p>
+
+                                        <div className={`pt-4 border-t ${styles.border}`}>
+                                            <p className="text-xs italic text-gray-500 font-serif">"{agent.quote}"</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- COMPARISON (The Math) --- */}
+                    <section id="comparison" className={`py-24 px-6 border-y ${styles.border} ${isDark ? 'bg-black' : 'bg-[#F5F5F7]'}`}>
+                        <div className="max-w-5xl mx-auto">
+                            <div className="mb-12 text-center">
+                                <h2 className="text-3xl font-bold tracking-tight">THE MATH MUST MATH</h2>
+                                <p className={`mt-2 ${styles.textMuted}`}>Why solo-founders win.</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {/* The Old Way */}
+                                <div className={`p-8 rounded-2xl border transition-all duration-500 ${isDark ? 'bg-[#111] border-white/5 opacity-50 grayscale hover:grayscale-0' : 'bg-white border-black/5 opacity-70 hover:opacity-100 shadow-sm'}`}>
+                                    <h3 className={`text-xl font-bold mb-6 ${styles.textMuted}`}>TRADITIONAL AGENCY</h3>
+                                    <ul className="space-y-4">
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.textMuted} ${styles.border}`}>
+                                            <span>Strategy Phase</span>
+                                            <span className="font-mono">$2,500</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.textMuted} ${styles.border}`}>
+                                            <span>Copywriting</span>
+                                            <span className="font-mono">$1,500</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.textMuted} ${styles.border}`}>
+                                            <span>Design & Dev</span>
+                                            <span className="font-mono">$3,000+</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.textMuted} ${styles.border}`}>
+                                            <span>Turnaround Time</span>
+                                            <span className="font-mono text-red-500">4-6 Weeks</span>
+                                        </li>
+                                        <li className="flex items-center justify-between font-bold pt-4 text-xl">
+                                            <span>TOTAL COST</span>
+                                            <span>$7,000+</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                {/* The Ghost Way */}
+                                <div className={`p-8 rounded-2xl border border-[#00FF41] relative overflow-hidden ${isDark ? 'bg-[#111]' : 'bg-white shadow-[0_0_40px_rgba(0,255,65,0.1)]'}`}>
+                                    <div className="absolute top-0 right-0 bg-[#00FF41] text-black text-xs font-bold px-3 py-1">RECOMMENDED</div>
+                                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                                        THE GHOST AGENCY <i className="fa-solid fa-bolt text-[#00FF41]"></i>
+                                    </h3>
+                                    <ul className="space-y-4">
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.border}`}>
+                                            <span>The Architect (Strat)</span>
+                                            <span className="font-mono text-[#00FF41]">INCLUDED</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.border}`}>
+                                            <span>The Oracle (Copy)</span>
+                                            <span className="font-mono text-[#00FF41]">INCLUDED</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.border}`}>
+                                            <span>The Construct (Dev)</span>
+                                            <span className="font-mono text-[#00FF41]">INCLUDED</span>
+                                        </li>
+                                        <li className={`flex items-center justify-between border-b pb-2 ${styles.border}`}>
+                                            <span>Turnaround Time</span>
+                                            <span className="font-mono text-[#00FF41]">10 Minutes</span>
+                                        </li>
+                                        <li className="flex items-center justify-between font-bold pt-4 text-xl">
+                                            <span>TOTAL COST</span>
+                                            <span>$49</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- PRICING / CTA --- */}
+                    <section id="pricing" className="py-32 px-6 relative overflow-hidden">
+                        {/* Decorative background glow */}
+                        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] blur-[150px] rounded-full pointer-events-none ${isDark ? 'bg-[#00FF41] opacity-10' : 'bg-[#00FF41] opacity-5'}`}></div>
+
+                        <div className="max-w-4xl mx-auto text-center relative z-10">
+                            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">
+                                READY TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF41] to-emerald-600">DISAPPEAR?</span>
+                            </h2>
+                            
+                            <p className={`text-xl mb-12 max-w-2xl mx-auto ${styles.textMuted}`}>
+                                Get the full system. The prompts, the manual, and the operational guidelines.
+                                One-time payment. Lifetime access.
+                            </p>
+
+                            <div className={`backdrop-blur-xl border p-8 md:p-12 rounded-3xl max-w-lg mx-auto transform hover:scale-105 transition-all duration-300 ${isDark ? 'bg-white/5 border-white/10' : 'bg-white/80 border-black/10 shadow-xl'}`}>
+                                <div className="flex justify-between items-start mb-8">
+                                    <div className="text-left">
+                                        <h3 className="text-2xl font-bold">THE TRIPWIRE</h3>
+                                        <p className={`text-sm ${styles.textMuted}`}>Complete Protocol Access</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-4xl font-bold">$49</span>
+                                        <p className="text-[#00FF41] text-xs font-mono">USD / ONE-TIME</p>
+                                    </div>
+                                </div>
+
+                                <ul className="space-y-4 mb-10 text-left">
+                                    {[
+                                        "4 Advanced GPT Prompts (The Asset)",
+                                        "Full Operational Manual (The Key)",
+                                        "Brand Strategy Framework",
+                                        "Copywriting & Psychology Engine",
+                                        "React & Tailwind Component Generator",
+                                        "Crisis Management Protocols"
+                                    ].map((item, i) => (
+                                        <li key={i} className={`flex items-center gap-3 ${styles.textMuted}`}>
+                                            <i className="fa-solid fa-check text-[#00FF41]"></i>
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <button className={`w-full py-5 font-bold text-lg tracking-widest rounded-lg transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)] hover:shadow-[0_0_40px_rgba(0,255,65,0.5)] flex items-center justify-center gap-2 group ${styles.buttonPrimary}`}>
+                                    DEPLOY SYSTEM
+                                    <i className="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                                
+                                <p className="mt-6 text-xs text-gray-500">
+                                    Secure 256-bit encryption. Instant digital delivery.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- FOOTER --- */}
+                    <footer className={`py-12 border-t text-center ${styles.border} ${isDark ? 'bg-black' : 'bg-[#F5F5F7]'}`}>
+                        <div className="flex justify-center mb-8">
+                            <div className={`w-10 h-10 rounded flex items-center justify-center text-[#00FF41] font-bold text-xl ${isDark ? 'bg-white/5' : 'bg-black/5'}`}>
+                                G
+                            </div>
+                        </div>
+                        <div className={`flex justify-center gap-8 text-sm mb-8 font-mono ${styles.textMuted}`}>
+                            <a href="#" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'}`}>MANIFESTO</a>
+                            <a href="#" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'}`}>LEGAL</a>
+                            <a href="#" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'}`}>TWITTER</a>
+                            <a href="#" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'}`}>LOGIN</a>
+                        </div>
+                        <p className="text-xs text-gray-500 font-mono">
+                            © {new Date().getFullYear()} THE GHOST AGENCY. SYSTEM VERSION 1.0.4
+                        </p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
